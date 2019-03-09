@@ -1,12 +1,16 @@
 package com.kyberwara.gonote;
 
+import android.content.Intent;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
@@ -42,6 +46,35 @@ public class MainActivity extends AppCompatActivity {
 
                         // Add code here to update the UI based on the item selected
                         // For example, swap UI fragments here
+
+                        int id = menuItem.getItemId();
+                        Fragment fragment = null;
+
+                        switch (id) {
+                           case R.id.add_new:
+                               Log.d("Info", "New");
+
+                               // fragment = new NewCategoryFragment();
+                               // FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                               // ft.replace(R.id.fragment_container, fragment);
+                               // ft.commit();
+
+                               Intent intent = new Intent(getApplicationContext(), AddNewCategory.class);
+                               startActivity(intent);
+
+                                break;
+                            default:
+                                Log.d("Info", "Selected " + menuItem);
+                                setTitle(menuItem.toString());
+                        }
+
+                        if (fragment != null) {
+                            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                            ft.replace(R.id.fragment_container, fragment);
+                            ft.commit();
+                        } else {
+                            Log.d("Error", "No valid fragment");
+                        }
 
                         return true;
                     }
