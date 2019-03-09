@@ -1,5 +1,6 @@
 package com.kyberwara.gonote;
 
+import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,11 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.List;
 
 public class AddNewCategory extends AppCompatActivity {
 
@@ -37,10 +43,33 @@ public class AddNewCategory extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+
+                Toast.makeText(getApplicationContext(), "Entry discarded.", Toast.LENGTH_SHORT).show();
+
                 finish();
                 return true;
+
             case R.id.done:
-                finish();
+
+                // Get database
+                Database db = Room.databaseBuilder(getApplicationContext(), Database.class, "notesdb").allowMainThreadQueries().build();
+
+                // Get categories entity
+                CategoriesEntity category = new CategoriesEntity();
+
+                // Get content of text field
+                EditText et = findViewById(R.id.categoryName);
+                String content = et.getText().toString();
+                category.setCategory(content);
+
+                // Insert to database
+                if(content.trim().length() != 0) {
+                    db.AddNewCategoryDAO().addCategory(category);
+                    Toast.makeText(getApplicationContext(), "Entry added.", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Invalid entry.", Toast.LENGTH_SHORT).show();
+                }
                 return true;
         }
         return super.onOptionsItemSelected(item);
