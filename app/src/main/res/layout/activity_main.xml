@@ -41,7 +41,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:menu="@menu/drawer_view"
         android:background="@color/colorDrawer"
         app:itemTextColor="@android:color/white"
         android:theme="@style/NavigationView" />

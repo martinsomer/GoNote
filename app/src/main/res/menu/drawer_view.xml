@@ -1,20 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <group
-        android:id="@+id/categories"
-        android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_camera"
-            android:title="foo" />
-        <item
-            android:id="@+id/nav_gallery"
-            android:title="bar" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:title="baz" />
-    </group>
-
-    <group
         android:id="@+id/extra"
         android:checkableBehavior="none">
 

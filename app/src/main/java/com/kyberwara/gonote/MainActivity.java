@@ -1,5 +1,6 @@
 package com.kyberwara.gonote;
 
+import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -11,7 +12,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_baseline_menu_24px);
 
+        // Get drawer_layout from layout file
         drawerLayout = findViewById(R.id.drawer_layout);
 
         // Handle navigation click events
@@ -79,6 +86,50 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                 });
+
+        // Get menu of navigationView
+        final Menu menu = navigationView.getMenu();
+
+        // Get database
+        final Database db = Room.databaseBuilder(getApplicationContext(), Database.class, "notesdb").allowMainThreadQueries().build();
+
+        // Listen for drawer movement (must include all methods)
+        drawerLayout.addDrawerListener(
+                new DrawerLayout.DrawerListener() {
+                    @Override
+                    public void onDrawerSlide(View drawerView, float slideOffset) {
+                        // Respond when the drawer's position changes
+
+                        // Clear current menu to avoid duplication
+                        menu.clear();
+
+                        // Get categories from database and append to menu
+                        List<CategoriesEntity> categories = db.AddNewCategoryDAO().getCategories();
+                        for (CategoriesEntity c : categories) {
+                            menu.add(c.getCategory());
+                        }
+
+                        // Append "Add Category" menu resource
+                        MenuInflater inflater = getMenuInflater();
+                        inflater.inflate(R.menu.drawer_view, menu);
+                    }
+
+                    @Override
+                    public void onDrawerOpened(View drawerView) {
+                        // Respond when the drawer is opened
+                    }
+
+                    @Override
+                    public void onDrawerClosed(View drawerView) {
+                        // Respond when the drawer is closed
+                    }
+
+                    @Override
+                    public void onDrawerStateChanged(int newState) {
+                        // Respond when the drawer motion state changes
+                    }
+                }
+        );
 
         // Disable tint of icons in navigation drawer
         navigationView.setItemIconTintList(null);
