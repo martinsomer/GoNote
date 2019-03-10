@@ -1,9 +1,12 @@
 package com.kyberwara.gonote;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
 
-@Entity(tableName = "Notes")
+import static android.arch.persistence.room.ForeignKey.CASCADE;
+
+@Entity(tableName = "Notes", foreignKeys = @ForeignKey(entity = CategoriesEntity.class, parentColumns = "ID", childColumns = "categoryID", onDelete = CASCADE))
 public class NotesEntity {
 
     @PrimaryKey(autoGenerate = true)

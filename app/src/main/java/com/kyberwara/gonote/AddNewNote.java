@@ -12,10 +12,14 @@ import android.widget.Toast;
 
 public class AddNewNote extends AppCompatActivity {
 
+    int categoryID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_note);
+
+        categoryID = getIntent().getIntExtra("categoryID", 0);
 
         setTitle("Add note");
 
@@ -54,11 +58,13 @@ public class AddNewNote extends AppCompatActivity {
                 String noteNameText = noteName.getText().toString();
                 String noteContentText = noteContent.getText().toString();
 
-                //category.setCategory(content);
+                note.setCategoryID(categoryID);
+                note.setNote(noteNameText);
+                note.setTitle(noteContentText);
 
                 // Insert to database
                 if(noteNameText.trim().length() != 0 && noteContentText.trim().length() != 0) {
-                    //db.AddNewCategoryDAO().addCategory(category);
+                    db.AddNewNoteDAO().addNote(note);
                     Toast.makeText(getApplicationContext(), "Note added.", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {

@@ -22,10 +22,14 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
+    private Menu menu;
+    private Database db;
+    int categoryID;
 
     // Onclick action for floating action button in category fragment
     public void fabAction(View view) {
         Intent intent = new Intent(getApplicationContext(), AddNewNote.class);
+        intent.putExtra("categoryID", categoryID);
         startActivity(intent);
     }
 
@@ -48,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Handle navigation click events
         NavigationView navigationView = findViewById(R.id.nav_view);
+
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -60,10 +65,10 @@ public class MainActivity extends AppCompatActivity {
                         // Add code here to update the UI based on the item selected
                         // For example, swap UI fragments here
 
-                        int id = menuItem.getItemId();
+                        categoryID = menuItem.getItemId();
                         Fragment fragment = null;
 
-                        switch (id) {
+                        switch (categoryID) {
                             case R.id.add_new:
                                 Intent intent = new Intent(getApplicationContext(), AddNewCategory.class);
                                 startActivity(intent);
@@ -83,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                             ft.replace(R.id.fragment_container, fragment);
                             ft.commit();
                         } else {
-                            Log.d("Error", "No valid fragment");
+                            Log.e("Error", "Invalid fragment");
                         }
 
                         return true;
@@ -91,51 +96,36 @@ public class MainActivity extends AppCompatActivity {
                 });
 
         // Get menu of navigationView
-        final Menu menu = navigationView.getMenu();
+        menu = navigationView.getMenu();
 
         // Get database
-        final Database db = Room.databaseBuilder(getApplicationContext(), Database.class, "notesdb").allowMainThreadQueries().build();
-
-        // Listen for drawer movement (must include all methods)
-        drawerLayout.addDrawerListener(
-                new DrawerLayout.DrawerListener() {
-                    @Override
-                    public void onDrawerSlide(View drawerView, float slideOffset) {
-                        // Respond when the drawer's position changes
-
-                        // Clear current menu to avoid duplication
-                        menu.clear();
-
-                        // Get categories from database and append to menu
-                        List<CategoriesEntity> categories = db.AddNewCategoryDAO().getCategories();
-                        for (CategoriesEntity c : categories) {
-                            menu.add(c.getCategory());
-                        }
-
-                        // Append "Add Category" menu resource
-                        MenuInflater inflater = getMenuInflater();
-                        inflater.inflate(R.menu.drawer_view, menu);
-                    }
-
-                    @Override
-                    public void onDrawerOpened(View drawerView) {
-                        // Respond when the drawer is opened
-                    }
-
-                    @Override
-                    public void onDrawerClosed(View drawerView) {
-                        // Respond when the drawer is closed
-                    }
-
-                    @Override
-                    public void onDrawerStateChanged(int newState) {
-                        // Respond when the drawer motion state changes
-                    }
-                }
-        );
+        db = Room.databaseBuilder(getApplicationContext(), Database.class, "notesdb").allowMainThreadQueries().build();
 
         // Disable tint of icons in navigation drawer
         navigationView.setItemIconTintList(null);
+    }
+
+    // Update categories list in Navigation Drawer
+    // when this activity becomes visible to user
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        // Clear current menu to avoid duplication
+        menu.clear();
+
+        // Get categories from database and append to menu
+        List<CategoriesEntity> categories = db.AddNewCategoryDAO().getCategories();
+        //for (CategoriesEntity c : categories) {
+        for (int i=0; i<categories.size(); i++) {
+            CategoriesEntity c = categories.get(i);
+
+            menu.add(1, i+1, Menu.NONE, c.getCategory());
+        }
+
+        // Append "Add Category" menu resource
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.drawer_view, menu);
     }
 
     // Open the drawer when the button is tapped
