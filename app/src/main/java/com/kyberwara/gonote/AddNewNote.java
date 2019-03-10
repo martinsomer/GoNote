@@ -1,32 +1,23 @@
 package com.kyberwara.gonote;
 
 import android.arch.persistence.room.Room;
-import android.content.Intent;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.List;
-
-public class AddNewCategory extends AppCompatActivity {
+public class AddNewNote extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_new_category);
+        setContentView(R.layout.activity_add_new_note);
 
-        setTitle("Add category");
+        setTitle("Add note");
 
         // Set the toolbar as the action bar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -44,7 +35,7 @@ public class AddNewCategory extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
 
-                Toast.makeText(getApplicationContext(), "Entry discarded.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Note discarded.", Toast.LENGTH_SHORT).show();
 
                 finish();
                 return true;
@@ -54,18 +45,21 @@ public class AddNewCategory extends AppCompatActivity {
                 // Get database
                 Database db = Room.databaseBuilder(getApplicationContext(), Database.class, "notesdb").allowMainThreadQueries().build();
 
-                // Get categories entity
-                CategoriesEntity category = new CategoriesEntity();
+                // Get notes entity
+                NotesEntity note = new NotesEntity();
 
                 // Get content of text field
-                EditText categoryName = findViewById(R.id.categoryName);
-                String categoryNameText = categoryName.getText().toString();
-                category.setCategory(categoryNameText);
+                EditText noteName = findViewById(R.id.noteName);
+                EditText noteContent = findViewById(R.id.noteContent);
+                String noteNameText = noteName.getText().toString();
+                String noteContentText = noteContent.getText().toString();
+
+                //category.setCategory(content);
 
                 // Insert to database
-                if(categoryNameText.trim().length() != 0) {
-                    db.AddNewCategoryDAO().addCategory(category);
-                    Toast.makeText(getApplicationContext(), "Entry added.", Toast.LENGTH_SHORT).show();
+                if(noteNameText.trim().length() != 0 && noteContentText.trim().length() != 0) {
+                    //db.AddNewCategoryDAO().addCategory(category);
+                    Toast.makeText(getApplicationContext(), "Note added.", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
                     Toast.makeText(getApplicationContext(), "Invalid entry.", Toast.LENGTH_SHORT).show();

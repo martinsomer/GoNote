@@ -24,11 +24,22 @@
         android:orientation="vertical">
 
         <EditText
-            android:id="@+id/categoryName"
+            android:id="@+id/noteName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Category name"
+            android:hint="Note name"
+            android:inputType="text"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/darker_gray"
+            android:textColorLink="@color/colorAccent" />
+
+        <EditText
+            android:id="@+id/noteContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Note content"
             android:inputType="text"
             android:textColor="@android:color/white"
             android:textColorHint="@android:color/darker_gray"

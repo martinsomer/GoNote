@@ -23,6 +23,12 @@ public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
 
+    // Onclick action for floating action button in category fragment
+    public void fabAction(View view) {
+        Intent intent = new Intent(getApplicationContext(), AddNewNote.class);
+        startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,21 +64,18 @@ public class MainActivity extends AppCompatActivity {
                         Fragment fragment = null;
 
                         switch (id) {
-                           case R.id.add_new:
-                               Log.d("Info", "New");
-
-                               // fragment = new NewCategoryFragment();
-                               // FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                               // ft.replace(R.id.fragment_container, fragment);
-                               // ft.commit();
-
-                               Intent intent = new Intent(getApplicationContext(), AddNewCategory.class);
-                               startActivity(intent);
-
+                            case R.id.add_new:
+                                Intent intent = new Intent(getApplicationContext(), AddNewCategory.class);
+                                startActivity(intent);
                                 break;
+
                             default:
-                                Log.d("Info", "Selected " + menuItem);
                                 setTitle(menuItem.toString());
+
+                                fragment = new CategoryFragment();
+                                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                                ft.replace(R.id.fragment_container, fragment);
+                                ft.commit();
                         }
 
                         if (fragment != null) {
