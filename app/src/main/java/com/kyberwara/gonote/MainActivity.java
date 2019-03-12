@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -25,13 +26,6 @@ public class MainActivity extends AppCompatActivity {
     private Menu menu;
     private Database db;
     int categoryID;
-
-    // Onclick action for floating action button in category fragment
-    public void fabAction(View view) {
-        Intent intent = new Intent(getApplicationContext(), AddNewNote.class);
-        intent.putExtra("categoryID", categoryID);
-        startActivity(intent);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -53,13 +53,13 @@ public class AddNewNote extends AppCompatActivity {
                 NotesEntity note = new NotesEntity();
 
                 // Get content of text field
-                EditText noteName = findViewById(R.id.noteName);
+                EditText noteTitle = findViewById(R.id.noteTitle);
                 EditText noteContent = findViewById(R.id.noteContent);
-                String noteNameText = noteName.getText().toString();
+                String noteNameText = noteTitle.getText().toString();
                 String noteContentText = noteContent.getText().toString();
 
                 note.setCategoryID(categoryID);
-                note.setNote(noteNameText);
+                note.setContent(noteNameText);
                 note.setTitle(noteContentText);
 
                 // Insert to database
