@@ -55,15 +55,15 @@ public class AddNewNote extends AppCompatActivity {
                 // Get content of text field
                 EditText noteTitle = findViewById(R.id.noteTitle);
                 EditText noteContent = findViewById(R.id.noteContent);
-                String noteNameText = noteTitle.getText().toString();
+                String noteTitleText = noteTitle.getText().toString();
                 String noteContentText = noteContent.getText().toString();
 
                 note.setCategoryID(categoryID);
-                note.setContent(noteNameText);
-                note.setTitle(noteContentText);
+                note.setTitle(noteTitleText);
+                note.setContent(noteContentText);
 
                 // Insert to database
-                if(noteNameText.trim().length() != 0 && noteContentText.trim().length() != 0) {
+                if(noteTitleText.trim().length() != 0 && noteContentText.trim().length() != 0) {
                     db.AddNewNoteDAO().addNote(note);
                     Toast.makeText(getApplicationContext(), "Note added.", Toast.LENGTH_SHORT).show();
                     finish();

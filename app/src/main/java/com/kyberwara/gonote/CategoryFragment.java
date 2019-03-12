@@ -1,21 +1,25 @@
 package com.kyberwara.gonote;
 
-import android.app.Activity;
 import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryFragment extends Fragment {
+
     // The onCreateView method is called when Fragment should create its View object hierarchy,
     // either dynamically or via XML layout inflation.
     @Override
@@ -40,24 +44,29 @@ public class CategoryFragment extends Fragment {
         });
     }
 
-    // Update notes list in the fragment
-    // this fragment becomes visible to user
+    // Update notes list the fragment when it becomes visible
     @Override
     public void onStart() {
         super.onStart();
+
+        // Construct the data source
+        ArrayList<Note> arrayOfNotes = new ArrayList<Note>();
+
+        // Create the adapter to convert the array to views
+        NotesAdapter adapter = new NotesAdapter(this.getContext(), arrayOfNotes);
+
+        // Attach the adapter to a ListView
+        ListView listView = getView().findViewById(R.id.notes_container);
+        listView.setAdapter(adapter);
+
         // Get database
         Database db = Room.databaseBuilder(getActivity().getApplicationContext(), Database.class, "notesdb").allowMainThreadQueries().build();
         List<NotesEntity> notes = db.AddNewNoteDAO().getNotes(((MainActivity)getActivity()).categoryID);
 
+        // Add items to adapter
         for (NotesEntity n : notes) {
-
-            String title = n.getTitle();
-            String content = n.getContent();
-
-            Log.i("title", "" + title);
-            Log.i("content", "" + content);
-
-            // todo insert element with these fields
+            Note newNote = new Note(n.getTitle(), n.getContent());
+            adapter.add(newNote);
         }
     }
 }
