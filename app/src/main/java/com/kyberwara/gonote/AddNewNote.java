@@ -45,6 +45,7 @@ public class AddNewNote extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 Toast.makeText(getApplicationContext(), "Note discarded.", Toast.LENGTH_SHORT).show();
+
                 // Hide keyboard
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
 
@@ -52,7 +53,6 @@ public class AddNewNote extends AppCompatActivity {
                 return true;
 
             case R.id.done:
-
                 // Get database
                 Database db = Room.databaseBuilder(getApplicationContext(), Database.class, "notesdb").allowMainThreadQueries().build();
 
@@ -73,6 +73,10 @@ public class AddNewNote extends AppCompatActivity {
                 if(noteTitleText.trim().length() != 0 && noteContentText.trim().length() != 0) {
                     db.AddNewNoteDAO().addNote(note);
                     Toast.makeText(getApplicationContext(), "Note added.", Toast.LENGTH_SHORT).show();
+
+                    // Hide keyboard
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+
                     finish();
                 } else {
                     Toast.makeText(getApplicationContext(), "Invalid entry.", Toast.LENGTH_SHORT).show();
@@ -80,6 +84,13 @@ public class AddNewNote extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    // Override back button press
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(getApplicationContext(), "Note discarded.", Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     @Override

@@ -57,17 +57,25 @@ public class EditNote extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+
                 // Finish activity
                 Toast.makeText(getApplicationContext(), "Changes discarded.", Toast.LENGTH_SHORT).show();
+
                 // Hide keyboard
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+
                 finish();
                 return true;
 
             case R.id.delete:
+
                 // Delete note from database
                 db.AddNewNoteDAO().deleteNote(note);
                 Toast.makeText(getApplicationContext(), "Note deleted.", Toast.LENGTH_SHORT).show();
+
+                // Hide keyboard
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+
                 finish();
                 return true;
 
@@ -84,10 +92,21 @@ public class EditNote extends AppCompatActivity {
                 // Update entry in database
                 db.AddNewNoteDAO().updateNote(note);
                 Toast.makeText(getApplicationContext(), "Note updated.", Toast.LENGTH_SHORT).show();
+
+                // Hide keyboard
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+
                 finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    // Override back button press
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(getApplicationContext(), "Changes discarded.", Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     @Override

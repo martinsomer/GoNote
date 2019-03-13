@@ -49,8 +49,10 @@ public class AddNewCategory extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 Toast.makeText(getApplicationContext(), "Entry discarded.", Toast.LENGTH_SHORT).show();
+
                 // Hide keyboard
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+
                 finish();
                 return true;
 
@@ -68,6 +70,10 @@ public class AddNewCategory extends AppCompatActivity {
                 if(categoryNameText.trim().length() != 0) {
                     db.AddNewCategoryDAO().addCategory(category);
                     Toast.makeText(getApplicationContext(), "Entry added.", Toast.LENGTH_SHORT).show();
+
+                    // Hide keyboard
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+
                     finish();
                 } else {
                     Toast.makeText(getApplicationContext(), "Invalid entry.", Toast.LENGTH_SHORT).show();
@@ -75,6 +81,13 @@ public class AddNewCategory extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    // Override back button press
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(getApplicationContext(), "Entry discarded.", Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     @Override
