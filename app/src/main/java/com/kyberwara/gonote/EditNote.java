@@ -1,7 +1,6 @@
 package com.kyberwara.gonote;
 
 import android.arch.persistence.room.Room;
-import android.provider.ContactsContract;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -86,7 +85,7 @@ public class EditNote extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.edit_note_toolbar_view, menu);
+        getMenuInflater().inflate(R.menu.edit_item_toolbar_view, menu);
         return true;
     }
 }

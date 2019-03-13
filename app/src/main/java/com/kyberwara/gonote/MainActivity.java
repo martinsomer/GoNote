@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private Menu menu;
     private Database db;
     int categoryID;
+    Fragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
                         // For example, swap UI fragments here
 
                         categoryID = menuItem.getItemId();
-                        Fragment fragment = null;
 
                         switch (categoryID) {
                             case R.id.add_new:
@@ -81,8 +81,9 @@ public class MainActivity extends AppCompatActivity {
                             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                             ft.replace(R.id.fragment_container, fragment);
                             ft.commit();
+
                         } else {
-                            Log.e("Error", "Invalid fragment");
+                            Log.i("Info", "No fragment selected");
                         }
 
                         return true;
@@ -113,8 +114,7 @@ public class MainActivity extends AppCompatActivity {
         //for (CategoriesEntity c : categories) {
         for (int i=0; i<categories.size(); i++) {
             CategoriesEntity c = categories.get(i);
-
-            menu.add(1, i+1, Menu.NONE, c.getCategory());
+            menu.add(1, c.getID(), Menu.NONE, c.getCategory());
         }
 
         // Append "Add Category" menu resource
@@ -129,7 +129,22 @@ public class MainActivity extends AppCompatActivity {
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
                 return true;
+
+            case R.id.edit:
+                if (fragment != null) {
+                    Intent intent = new Intent(getApplicationContext(), EditCategory.class);
+                    intent.putExtra("categoryID", categoryID);
+                    startActivity(intent);
+                }
+                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.categegory_toolbar_view, menu);
+        return true;
     }
 }
