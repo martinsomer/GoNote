@@ -1,8 +1,10 @@
 package com.kyberwara.gonote;
 
 import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import java.util.List;
 
@@ -12,6 +14,15 @@ public interface AddNewNoteDAO {
     @Insert
     public void addNote(NotesEntity note);
 
-    @Query("SELECT * FROM notes WHERE categoryID=:id")
-    public List<NotesEntity> getNotes(int id);
+    @Query("SELECT * FROM notes WHERE categoryID=:ID")
+    public List<NotesEntity> getNotes(int ID);
+
+    @Query("SELECT * FROM notes WHERE ID=:ID")
+    public NotesEntity getNote(int ID);
+
+    @Delete
+    public void deleteNote(NotesEntity note);
+
+    @Update
+    public void updateNote(NotesEntity note);
 }

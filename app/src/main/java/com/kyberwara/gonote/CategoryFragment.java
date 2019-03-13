@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -56,7 +58,7 @@ public class CategoryFragment extends Fragment {
         NotesAdapter adapter = new NotesAdapter(this.getContext(), arrayOfNotes);
 
         // Attach the adapter to a ListView
-        ListView listView = getView().findViewById(R.id.notes_container);
+        final ListView listView = getView().findViewById(R.id.notes_container);
         listView.setAdapter(adapter);
 
         // Get database
@@ -65,7 +67,7 @@ public class CategoryFragment extends Fragment {
 
         // Add items to adapter
         for (NotesEntity n : notes) {
-            Note newNote = new Note(n.getTitle(), n.getContent());
+            Note newNote = new Note(n.getTitle(), n.getContent(), n.getID());
             adapter.add(newNote);
         }
     }

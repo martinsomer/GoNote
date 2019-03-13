@@ -32,25 +32,22 @@ public class AddNewCategory extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Add the nav drawer button
+        // Add the back button
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_24px);
     }
 
-    // Open the drawer when the button is tapped
+    // Listener for toolbar button clicks
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-
                 Toast.makeText(getApplicationContext(), "Entry discarded.", Toast.LENGTH_SHORT).show();
-
                 finish();
                 return true;
 
             case R.id.done:
-
                 // Get database
                 Database db = Room.databaseBuilder(getApplicationContext(), Database.class, "notesdb").allowMainThreadQueries().build();
 

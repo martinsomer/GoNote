@@ -1,6 +1,8 @@
 package com.kyberwara.gonote;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +17,10 @@ public class NotesAdapter extends ArrayAdapter<Note> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         // Get the data item for this position
-        Note note = getItem(position);
+        final Note note = getItem(position);
 
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
@@ -32,6 +34,15 @@ public class NotesAdapter extends ArrayAdapter<Note> {
         // Populate the data into the template view using the data object
         noteTitle.setText(note.title);
         noteContent.setText(note.content);
+
+        // Start note editing activity on click, and pass ID of note clicked
+        convertView.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), EditNote.class);
+                intent.putExtra("noteID", note.ID);
+                getContext().startActivity(intent);
+            }
+        });
 
         // Return the completed view to render on screen
         return convertView;

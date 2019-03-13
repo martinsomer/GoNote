@@ -1,6 +1,7 @@
 package com.kyberwara.gonote;
 
 import android.arch.persistence.room.Room;
+import android.provider.ContactsContract;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,18 +11,20 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class AddNewNote extends AppCompatActivity {
+public class EditNote extends AppCompatActivity {
 
-    int categoryID;
+    int noteID;
+    Database db;
+    NotesEntity note;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_new_note);
+        setContentView(R.layout.activity_edit_note);
 
-        categoryID = getIntent().getIntExtra("categoryID", 0);
+        setTitle("Edit note");
 
-        setTitle("Add note");
+        noteID = getIntent().getIntExtra("noteID", 0);
 
         // Set the toolbar as the action bar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -31,6 +34,17 @@ public class AddNewNote extends AppCompatActivity {
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_24px);
+
+        // Get database
+        db = Room.databaseBuilder(getApplicationContext(), Database.class, "notesdb").allowMainThreadQueries().build();
+        note = db.AddNewNoteDAO().getNote(noteID);
+
+        // Get note title and content
+        EditText noteTitle = findViewById(R.id.noteTitle);
+        EditText noteContent = findViewById(R.id.noteContent);
+
+        noteTitle.setText(note.getTitle());
+        noteContent.setText(note.getContent());
     }
 
     // Listener for toolbar button clicks
@@ -38,38 +52,32 @@ public class AddNewNote extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                // Finish activity
+                Toast.makeText(getApplicationContext(), "Changes discarded.", Toast.LENGTH_SHORT).show();
+                finish();
+                return true;
 
-                Toast.makeText(getApplicationContext(), "Note discarded.", Toast.LENGTH_SHORT).show();
-
+            case R.id.delete:
+                // Delete note from database
+                db.AddNewNoteDAO().deleteNote(note);
+                Toast.makeText(getApplicationContext(), "Note deleted.", Toast.LENGTH_SHORT).show();
                 finish();
                 return true;
 
             case R.id.done:
-
-                // Get database
-                Database db = Room.databaseBuilder(getApplicationContext(), Database.class, "notesdb").allowMainThreadQueries().build();
-
-                // Get notes entity
-                NotesEntity note = new NotesEntity();
-
                 // Get content of text field
                 EditText noteTitle = findViewById(R.id.noteTitle);
                 EditText noteContent = findViewById(R.id.noteContent);
                 String noteTitleText = noteTitle.getText().toString();
                 String noteContentText = noteContent.getText().toString();
 
-                note.setCategoryID(categoryID);
                 note.setTitle(noteTitleText);
                 note.setContent(noteContentText);
 
-                // Insert to database
-                if(noteTitleText.trim().length() != 0 && noteContentText.trim().length() != 0) {
-                    db.AddNewNoteDAO().addNote(note);
-                    Toast.makeText(getApplicationContext(), "Note added.", Toast.LENGTH_SHORT).show();
-                    finish();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Invalid entry.", Toast.LENGTH_SHORT).show();
-                }
+                // Update entry in database
+                db.AddNewNoteDAO().updateNote(note);
+                Toast.makeText(getApplicationContext(), "Note updated.", Toast.LENGTH_SHORT).show();
+                finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -78,7 +86,7 @@ public class AddNewNote extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.toolbar_view, menu);
+        getMenuInflater().inflate(R.menu.edit_note_toolbar_view, menu);
         return true;
     }
 }
