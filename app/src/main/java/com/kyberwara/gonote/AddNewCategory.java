@@ -7,10 +7,13 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
 public class AddNewCategory extends AppCompatActivity {
+
+    EditText categoryName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +30,14 @@ public class AddNewCategory extends AppCompatActivity {
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_24px);
+
+        // Get content of text field
+        categoryName = findViewById(R.id.categoryName);
+
+        // Show keyboard by default
+        categoryName.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
     }
 
     // Listener for toolbar button clicks
@@ -45,8 +56,6 @@ public class AddNewCategory extends AppCompatActivity {
                 // Get categories entity
                 CategoriesEntity category = new CategoriesEntity();
 
-                // Get content of text field
-                EditText categoryName = findViewById(R.id.categoryName);
                 String categoryNameText = categoryName.getText().toString();
                 category.setCategory(categoryNameText);
 

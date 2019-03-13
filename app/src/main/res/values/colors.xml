@@ -6,4 +6,5 @@
     <color name="colorToolbar">#212D3A</color>
     <color name="colorDrawer">#1A2632</color>
     <color name="listDivider">#37414C</color>
+    <color name="colorListItem">#293747</color>
 </resources>
