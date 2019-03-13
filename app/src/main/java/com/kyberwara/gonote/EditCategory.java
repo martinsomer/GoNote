@@ -7,14 +7,16 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
 public class EditCategory extends AppCompatActivity {
 
-        int categoryID;
-        Database db;
-        CategoriesEntity category;
+    int categoryID;
+    Database db;
+    CategoriesEntity category;
+    InputMethodManager imm;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,10 @@ public class EditCategory extends AppCompatActivity {
             EditText categoryName = findViewById(R.id.categoryName);
 
             categoryName.setText(category.getCategory());
+
+            // Show keyboard
+            imm = (InputMethodManager) getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
         }
 
         // Listener for toolbar button clicks
@@ -51,6 +57,8 @@ public class EditCategory extends AppCompatActivity {
                 case android.R.id.home:
                     // Finish activity
                     Toast.makeText(getApplicationContext(), "Changes discarded.", Toast.LENGTH_SHORT).show();
+                    // Hide keyboard
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
                     finish();
                     return true;
 

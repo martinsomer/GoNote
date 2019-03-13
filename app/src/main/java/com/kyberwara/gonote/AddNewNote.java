@@ -7,12 +7,14 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
 public class AddNewNote extends AppCompatActivity {
 
     int categoryID;
+    InputMethodManager imm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,10 @@ public class AddNewNote extends AppCompatActivity {
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_24px);
+
+        // Show keyboard
+        imm = (InputMethodManager) getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
     }
 
     // Listener for toolbar button clicks
@@ -38,8 +44,9 @@ public class AddNewNote extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-
                 Toast.makeText(getApplicationContext(), "Note discarded.", Toast.LENGTH_SHORT).show();
+                // Hide keyboard
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
 
                 finish();
                 return true;

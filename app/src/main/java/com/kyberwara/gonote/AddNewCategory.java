@@ -14,6 +14,7 @@ import android.widget.Toast;
 public class AddNewCategory extends AppCompatActivity {
 
     EditText categoryName;
+    InputMethodManager imm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +37,9 @@ public class AddNewCategory extends AppCompatActivity {
 
         // Show keyboard by default
         categoryName.requestFocus();
-        InputMethodManager imm = (InputMethodManager) getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+
+        // Show keyboard
+        imm = (InputMethodManager) getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
     }
 
@@ -46,6 +49,8 @@ public class AddNewCategory extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 Toast.makeText(getApplicationContext(), "Entry discarded.", Toast.LENGTH_SHORT).show();
+                // Hide keyboard
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
                 finish();
                 return true;
 

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -15,6 +16,7 @@ public class EditNote extends AppCompatActivity {
     int noteID;
     Database db;
     NotesEntity note;
+    InputMethodManager imm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,10 @@ public class EditNote extends AppCompatActivity {
 
         noteTitle.setText(note.getTitle());
         noteContent.setText(note.getContent());
+
+        // Show keyboard
+        imm = (InputMethodManager) getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
     }
 
     // Listener for toolbar button clicks
@@ -53,6 +59,8 @@ public class EditNote extends AppCompatActivity {
             case android.R.id.home:
                 // Finish activity
                 Toast.makeText(getApplicationContext(), "Changes discarded.", Toast.LENGTH_SHORT).show();
+                // Hide keyboard
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
                 finish();
                 return true;
 
