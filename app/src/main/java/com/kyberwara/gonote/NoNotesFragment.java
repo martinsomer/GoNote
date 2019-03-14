@@ -14,5 +14,4 @@ public class NoNotesFragment extends Fragment {
         // Defines the xml file for the fragment
         return inflater.inflate(R.layout.fragment_no_notes, parent, false);
     }
-
 }

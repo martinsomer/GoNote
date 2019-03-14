@@ -12,9 +12,9 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/img_note"
+            android:src="@drawable/img_folder"
             android:scaleType="centerInside"
-            android:layout_margin="40dp"/>
+            android:layout_margin="50dp"/>
     </FrameLayout>
 
     <FrameLayout
@@ -27,9 +27,17 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top|center_horizontal"
             android:fontFamily="sans-serif-smallcaps"
-            android:text="No notes found."
+            android:text="This category is empty."
             android:textColor="@color/colorText"
             android:textSize="26sp" />
     </FrameLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:src="@drawable/ic_baseline_add_24px"
+        android:layout_margin="16dp" />
 
 </LinearLayout>

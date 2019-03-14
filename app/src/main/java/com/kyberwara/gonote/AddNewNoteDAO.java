@@ -26,6 +26,9 @@ public interface AddNewNoteDAO {
     @Query("SELECT COUNT(ID) FROM notes")
     public int getNumberOfNotes();
 
+    @Query("SELECT COUNT(ID) FROM notes WHERE categoryID=:ID")
+    public int getNumberOfNotesInCategory(int ID);
+
     @Delete
     public void deleteNote(NotesEntity note);
 

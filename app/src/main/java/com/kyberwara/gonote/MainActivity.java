@@ -76,7 +76,12 @@ public class MainActivity extends AppCompatActivity {
 
                         default:
                             setTitle(menuItem.toString());
-                            fragment = new CategoryFragment();
+
+                            if (db.AddNewNoteDAO().getNumberOfNotesInCategory(categoryID) == 0) {
+                                fragment = new EmptyCategoryFragment();
+                            } else {
+                                fragment = new CategoryFragment();
+                            }
                             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
 
                             // Show edit button on toolbar
@@ -101,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        // Reload toolbar when activity becomes visible
+        // Reload toolbar when activity becomes visible to update icons
         invalidateOptionsMenu();
 
         // Get the category from database when activity starts
@@ -109,7 +114,13 @@ public class MainActivity extends AppCompatActivity {
         if(category != null) {
             // Category still exists, update name and load category fragment
             setTitle(category.getCategory());
-            fragment = new CategoryFragment();
+
+            // Check if category is empty
+            if (db.AddNewNoteDAO().getNumberOfNotesInCategory(categoryID) == 0) {
+                fragment = new EmptyCategoryFragment();
+            } else {
+                fragment = new CategoryFragment();
+            }
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
         } else {
             // Category has been deleted, go to "Home"
@@ -169,16 +180,16 @@ public class MainActivity extends AppCompatActivity {
     private void openHomeCategory() {
         setTitle("Home");
         // Check if there are any categories
-        if (db.AddNewCategoryDAO().getNumberOfCategories() == 0) {
-            fragment = new NoCategoriesFragment();
-        } else {
+        //if (db.AddNewCategoryDAO().getNumberOfCategories() == 0) {
+            //fragment = new NoCategoriesFragment();
+        //} else {
             // Check if there are any notes
             if (db.AddNewNoteDAO().getNumberOfNotes() == 0) {
                 fragment = new NoNotesFragment();
             } else {
                 fragment = new AllNotesFragment();
             }
-        }
+        //}
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
 
         // Hide edit button on toolbar
