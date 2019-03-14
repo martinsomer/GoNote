@@ -71,6 +71,12 @@ public class AddNewCategory extends AppCompatActivity {
                     db.AddNewCategoryDAO().addCategory(category);
                     Toast.makeText(getApplicationContext(), "Entry added.", Toast.LENGTH_SHORT).show();
 
+                    // Switch to new category in main activity
+                    MainActivity.categoryID = db.AddNewCategoryDAO().getLastCategory().getID();
+
+                    // Show edit button when going back to category
+                    MainActivity.showEditButton = true;
+
                     // Hide keyboard
                     imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
 

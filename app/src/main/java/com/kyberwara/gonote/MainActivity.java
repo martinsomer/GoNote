@@ -4,14 +4,12 @@ import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,8 +21,9 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private Menu menu;
     private Database db;
-    int categoryID;
-    Fragment fragment;
+    public static int categoryID;
+    private Fragment fragment;
+    public static boolean showEditButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +39,11 @@ public class MainActivity extends AppCompatActivity {
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_baseline_menu_24px);
 
+        // Get database
+        db = Room.databaseBuilder(getApplicationContext(), Database.class, "notesdb").allowMainThreadQueries().build();
+
+        openHomeCategory();
+
         // Get drawer_layout from layout file
         drawerLayout = findViewById(R.id.drawer_layout);
 
@@ -47,52 +51,45 @@ public class MainActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.nav_view);
 
         navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        // set item as selected to persist highlight
-                        menuItem.setChecked(true);
-                        // close drawer when item is tapped
-                        drawerLayout.closeDrawers();
+            new NavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(MenuItem menuItem) {
+                    // set item as selected to persist highlight
+                    menuItem.setChecked(true);
+                    // close drawer when item is tapped
+                    drawerLayout.closeDrawers();
 
-                        // Add code here to update the UI based on the item selected
-                        // For example, swap UI fragments here
+                    // Add code here to update the UI based on the item selected
+                    // For example, swap UI fragments here
 
-                        categoryID = menuItem.getItemId();
+                    categoryID = menuItem.getItemId();
 
-                        switch (categoryID) {
-                            case R.id.add_new:
-                                Intent intent = new Intent(getApplicationContext(), AddNewCategory.class);
-                                startActivity(intent);
-                                break;
+                    switch (categoryID) {
+                        case R.id.home:
+                            openHomeCategory();
+                            break;
 
-                            default:
-                                setTitle(menuItem.toString());
+                        case R.id.add_new:
+                            Intent intent = new Intent(getApplicationContext(), AddNewCategory.class);
+                            startActivity(intent);
+                            break;
 
-                                fragment = new CategoryFragment();
-                                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                                ft.replace(R.id.fragment_container, fragment);
-                                ft.commit();
-                        }
+                        default:
+                            setTitle(menuItem.toString());
+                            fragment = new CategoryFragment();
+                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
 
-                        if (fragment != null) {
-                            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                            ft.replace(R.id.fragment_container, fragment);
-                            ft.commit();
-
-                        } else {
-                            Log.i("Info", "No fragment selected");
-                        }
-
-                        return true;
+                            // Show edit button on toolbar
+                            showEditButton = true;
+                            invalidateOptionsMenu();
                     }
-                });
+
+                    return true;
+                }
+            });
 
         // Get menu of navigationView
         menu = navigationView.getMenu();
-
-        // Get database
-        db = Room.databaseBuilder(getApplicationContext(), Database.class, "notesdb").allowMainThreadQueries().build();
 
         // Disable tint of icons in navigation drawer
         navigationView.setItemIconTintList(null);
@@ -104,8 +101,30 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        // Reload toolbar when activity becomes visible
+        invalidateOptionsMenu();
+
+        // Get the category from database when activity starts
+        CategoriesEntity category = db.AddNewCategoryDAO().getCategory(categoryID);
+        if(category != null) {
+            // Category still exists, update name and load category fragment
+            setTitle(category.getCategory());
+            fragment = new CategoryFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+        } else {
+            // Category has been deleted, go to "Home"
+            openHomeCategory();
+        }
+
         // Clear current menu to avoid duplication
         menu.clear();
+
+        // Append "Home" menu resource
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.drawer_home_view, menu);
+
+        // Append "Add Category" menu resource
+        inflater.inflate(R.menu.drawer_add_new_category_view, menu);
 
         // Get categories from database and append to menu
         List<CategoriesEntity> categories = db.AddNewCategoryDAO().getCategories();
@@ -114,10 +133,6 @@ public class MainActivity extends AppCompatActivity {
             CategoriesEntity c = categories.get(i);
             menu.add(1, c.getID(), Menu.NONE, c.getCategory());
         }
-
-        // Append "Add Category" menu resource
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.drawer_view, menu);
     }
 
     // Open the drawer when the button is tapped
@@ -129,11 +144,9 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case R.id.edit:
-                if (fragment != null) {
-                    Intent intent = new Intent(getApplicationContext(), EditCategory.class);
-                    intent.putExtra("categoryID", categoryID);
-                    startActivity(intent);
-                }
+                Intent intent = new Intent(getApplicationContext(), EditCategory.class);
+                intent.putExtra("categoryID", categoryID);
+                startActivity(intent);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -143,6 +156,33 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.categegory_toolbar_view, menu);
+
+        // If edit button on toolbar should be shown
+        if (!showEditButton) {
+            menu.findItem(R.id.edit).setVisible(false);
+        }
+
         return true;
+    }
+
+    // Helper function to open home category
+    private void openHomeCategory() {
+        setTitle("Home");
+        // Check if there are any categories
+        if (db.AddNewCategoryDAO().getNumberOfCategories() == 0) {
+            fragment = new NoCategoriesFragment();
+        } else {
+            // Check if there are any notes
+            if (db.AddNewNoteDAO().getNumberOfNotes() == 0) {
+                fragment = new NoNotesFragment();
+            } else {
+                fragment = new AllNotesFragment();
+            }
+        }
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+
+        // Hide edit button on toolbar
+        showEditButton = false;
+        invalidateOptionsMenu();
     }
 }

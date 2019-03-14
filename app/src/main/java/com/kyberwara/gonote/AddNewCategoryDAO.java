@@ -20,6 +20,12 @@ public interface AddNewCategoryDAO {
     @Query("SELECT * FROM categories WHERE ID=:ID")
     public CategoriesEntity getCategory(int ID);
 
+    @Query("SELECT COUNT(ID) FROM categories")
+    public int getNumberOfCategories();
+
+    @Query("SELECT * FROM categories ORDER BY ID DESC LIMIT 1 ")
+    public CategoriesEntity getLastCategory();
+
     @Delete
     public void deleteCategory(CategoriesEntity category);
 

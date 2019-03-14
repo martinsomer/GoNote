@@ -20,6 +20,12 @@ public interface AddNewNoteDAO {
     @Query("SELECT * FROM notes WHERE ID=:ID")
     public NotesEntity getNote(int ID);
 
+    @Query("SELECT * FROM notes")
+    public List<NotesEntity> getAllNotes();
+
+    @Query("SELECT COUNT(ID) FROM notes")
+    public int getNumberOfNotes();
+
     @Delete
     public void deleteNote(NotesEntity note);
 
