@@ -26,4 +26,4 @@ Teiste juhendite puhul SDK versioonidega probleeme ei esinenud.
 Rakenduses on kasutatud juhendeid vaid osade funktsioonide lisamiseks; rakendus ei põhine ühelgi juhendil (vaid kasutab nendest osasid funktsioone). Erinevalt juhenditest on Navigation Drawer dünaamiliselt genereeritav. Sellesse on lisatud "Home" valik, mis viib koduekraanile, ja "Add Category". Märkmeid ja kategooriaid saab lisada, muuta ja kustutada. Nende salvestamiseks on loodud andmebaasid kategooriate ja märkmete jaoks. Rakenduse teema ja värviskeem on täielikult muudetud. Lisatud on Toolbar vajalike nuppudega märkmete ja kategooriate haldamiseks. Märkmete lisamiseks tegin Floating Action Buttoni. Märkmete puudumise või tühja kategooria korral näidatakse kasutajale illustreerivat pilti.
 
 ## Demo
-Demo on vaadatav [siin](https://www.youtube.com/).
+Demo on vaadatav [siin](https://drive.google.com/file/d/1_-zg5NUsEnG_suj0bZpfcSa1uben3IBg/view?usp=sharing).
