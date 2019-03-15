@@ -9,7 +9,7 @@ import android.arch.persistence.room.Update;
 import java.util.List;
 
 @Dao
-public interface AddNewNoteDAO {
+public interface NotesDAO {
 
     @Insert
     public void addNote(NotesEntity note);

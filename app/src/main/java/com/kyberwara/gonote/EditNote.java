@@ -38,7 +38,7 @@ public class EditNote extends AppCompatActivity {
 
         // Get database
         db = Room.databaseBuilder(getApplicationContext(), Database.class, "notesdb").allowMainThreadQueries().build();
-        note = db.AddNewNoteDAO().getNote(noteID);
+        note = db.NotesDAO().getNote(noteID);
 
         // Get note title and content
         EditText noteTitle = findViewById(R.id.noteTitle);
@@ -70,7 +70,7 @@ public class EditNote extends AppCompatActivity {
             case R.id.delete:
 
                 // Delete note from database
-                db.AddNewNoteDAO().deleteNote(note);
+                db.NotesDAO().deleteNote(note);
                 Toast.makeText(getApplicationContext(), "Note deleted.", Toast.LENGTH_SHORT).show();
 
                 // Hide keyboard
@@ -90,7 +90,7 @@ public class EditNote extends AppCompatActivity {
                 note.setContent(noteContentText);
 
                 // Update entry in database
-                db.AddNewNoteDAO().updateNote(note);
+                db.NotesDAO().updateNote(note);
                 Toast.makeText(getApplicationContext(), "Note updated.", Toast.LENGTH_SHORT).show();
 
                 // Hide keyboard

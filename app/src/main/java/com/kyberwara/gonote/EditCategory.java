@@ -38,7 +38,7 @@ public class EditCategory extends AppCompatActivity {
 
         // Get database
         db = Room.databaseBuilder(getApplicationContext(), Database.class, "notesdb").allowMainThreadQueries().build();
-        category = db.AddNewCategoryDAO().getCategory(categoryID);
+        category = db.CategoriesDAO().getCategory(categoryID);
 
         // Get category name
         EditText categoryName = findViewById(R.id.categoryName);
@@ -66,7 +66,7 @@ public class EditCategory extends AppCompatActivity {
 
             case R.id.delete:
                 // Delete category from database
-                db.AddNewCategoryDAO().deleteCategory(category);
+                db.CategoriesDAO().deleteCategory(category);
                 Toast.makeText(getApplicationContext(), "Category deleted.", Toast.LENGTH_SHORT).show();
 
                 // Hide keyboard
@@ -83,7 +83,7 @@ public class EditCategory extends AppCompatActivity {
                 category.setCategory(categoryNameText);
 
                 // Update entry in database
-                db.AddNewCategoryDAO().updateCategory(category);
+                db.CategoriesDAO().updateCategory(category);
                 Toast.makeText(getApplicationContext(), "Category updated.", Toast.LENGTH_SHORT).show();
 
                 // Hide keyboard

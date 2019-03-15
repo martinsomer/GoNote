@@ -9,7 +9,7 @@ import android.arch.persistence.room.Update;
 import java.util.List;
 
 @Dao
-public interface AddNewCategoryDAO {
+public interface CategoriesDAO {
 
     @Insert
     public void addCategory(CategoriesEntity category);

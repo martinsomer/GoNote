@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
                         default:
                             setTitle(menuItem.toString());
 
-                            if (db.AddNewNoteDAO().getNumberOfNotesInCategory(categoryID) == 0) {
+                            if (db.NotesDAO().getNumberOfNotesInCategory(categoryID) == 0) {
                                 fragment = new EmptyCategoryFragment();
                             } else {
                                 fragment = new CategoryFragment();
@@ -110,13 +110,13 @@ public class MainActivity extends AppCompatActivity {
         invalidateOptionsMenu();
 
         // Get the category from database when activity starts
-        CategoriesEntity category = db.AddNewCategoryDAO().getCategory(categoryID);
+        CategoriesEntity category = db.CategoriesDAO().getCategory(categoryID);
         if(category != null) {
             // Category still exists, update name and load category fragment
             setTitle(category.getCategory());
 
             // Check if category is empty
-            if (db.AddNewNoteDAO().getNumberOfNotesInCategory(categoryID) == 0) {
+            if (db.NotesDAO().getNumberOfNotesInCategory(categoryID) == 0) {
                 fragment = new EmptyCategoryFragment();
             } else {
                 fragment = new CategoryFragment();
@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         inflater.inflate(R.menu.drawer_add_new_category_view, menu);
 
         // Get categories from database and append to menu
-        List<CategoriesEntity> categories = db.AddNewCategoryDAO().getCategories();
+        List<CategoriesEntity> categories = db.CategoriesDAO().getCategories();
         //for (CategoriesEntity c : categories) {
         for (int i=0; i<categories.size(); i++) {
             CategoriesEntity c = categories.get(i);
@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
             //fragment = new NoCategoriesFragment();
         //} else {
             // Check if there are any notes
-            if (db.AddNewNoteDAO().getNumberOfNotes() == 0) {
+            if (db.NotesDAO().getNumberOfNotes() == 0) {
                 fragment = new NoNotesFragment();
             } else {
                 fragment = new AllNotesFragment();

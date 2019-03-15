@@ -38,7 +38,7 @@ public class AllNotesFragment extends Fragment {
 
         // Get database
         Database db = Room.databaseBuilder(getActivity().getApplicationContext(), Database.class, "notesdb").allowMainThreadQueries().build();
-        List<NotesEntity> notes = db.AddNewNoteDAO().getAllNotes();
+        List<NotesEntity> notes = db.NotesDAO().getAllNotes();
 
         // Add items to adapter
         for (NotesEntity n : notes) {

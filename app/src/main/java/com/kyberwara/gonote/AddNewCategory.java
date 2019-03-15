@@ -68,11 +68,11 @@ public class AddNewCategory extends AppCompatActivity {
 
                 // Insert to database
                 if(categoryNameText.trim().length() != 0) {
-                    db.AddNewCategoryDAO().addCategory(category);
+                    db.CategoriesDAO().addCategory(category);
                     Toast.makeText(getApplicationContext(), "Entry added.", Toast.LENGTH_SHORT).show();
 
                     // Switch to new category in main activity
-                    MainActivity.categoryID = db.AddNewCategoryDAO().getLastCategory().getID();
+                    MainActivity.categoryID = db.CategoriesDAO().getLastCategory().getID();
 
                     // Show edit button when going back to category
                     MainActivity.showEditButton = true;

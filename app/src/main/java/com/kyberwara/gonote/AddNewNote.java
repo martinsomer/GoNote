@@ -71,7 +71,7 @@ public class AddNewNote extends AppCompatActivity {
 
                 // Insert to database
                 if(noteTitleText.trim().length() != 0 && noteContentText.trim().length() != 0) {
-                    db.AddNewNoteDAO().addNote(note);
+                    db.NotesDAO().addNote(note);
                     Toast.makeText(getApplicationContext(), "Note added.", Toast.LENGTH_SHORT).show();
 
                     // Hide keyboard

@@ -57,7 +57,7 @@ public class CategoryFragment extends Fragment {
 
         // Get database
         Database db = Room.databaseBuilder(getActivity().getApplicationContext(), Database.class, "notesdb").allowMainThreadQueries().build();
-        List<NotesEntity> notes = db.AddNewNoteDAO().getNotes(MainActivity.categoryID);
+        List<NotesEntity> notes = db.NotesDAO().getNotes(MainActivity.categoryID);
 
         // Add items to adapter
         for (NotesEntity n : notes) {
